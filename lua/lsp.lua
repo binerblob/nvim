@@ -1,9 +1,5 @@
 vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
-  'https://github.com/mason-org/mason.nvim',
-  'https://github.com/mason-org/mason-lspconfig.nvim',
-  'https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim',
-
   'https://github.com/nvim-treesitter/nvim-treesitter',
 
   'https://github.com/L3MON4D3/LuaSnip',
@@ -40,42 +36,26 @@ require('blink.cmp').setup {
   signature = { enabled = true },
 }
 
--- LSP Configuration
-require('mason').setup()
-require('mason-lspconfig').setup()
-require('mason-tool-installer').setup {
-  ensure_installed = {
-    'lua_ls',
-    'stylua',
-    'clangd',
-    -- 'rust_analyzer',
+-- LSP servers. Packages are managed manually
+local servers = {
+  lua_ls = {
+    settings = {
+      Lua = {
+        runtime = { version = 'LuaJIT' },
+        diagnostics = { globals = { 'vim', 'require' } },
+        workspace = { library = vim.api.nvim_get_runtime_file('', true) },
+        telemetry = { enable = false }
+      }
+    }
   },
+  rust_analyzer = {},
+  clangd = {}
 }
-vim.lsp.config('lua_ls', {
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        globals = {
-          'vim',
-          'require',
-        },
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file('', true),
-      },
-      telemetry = {
-        enable = false,
-      },
-    },
-  },
-})
-vim.lsp.config('rust_analyzer', {
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
-})
-vim.lsp.enable('rust_analyzer')
+for server, config in pairs(servers) do
+  config.capabilities = require('blink.cmp').get_lsp_capabilities()
+  vim.lsp.config(server, config)
+  vim.lsp.enable(server)
+end
 
 -- Treesitter
 require('nvim-treesitter').install {
