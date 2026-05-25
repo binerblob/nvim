@@ -1,10 +1,10 @@
-vim.pack.add({
-  "https://github.com/akinsho/bufferline.nvim"
-})
+vim.pack.add {
+  'https://github.com/akinsho/bufferline.nvim',
+}
 
-require("bufferline").setup({
+require('bufferline').setup {
   options = {
-    mode = "buffers",
-    separator_style = "slant",
-  }
-})
+    mode = 'buffers',
+    separator_style = 'slant',
+  },
+}

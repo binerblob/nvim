@@ -1,24 +1,22 @@
 -- General Neovim options
-require("statusbar")
+require 'statusbar'
 
 -- General Neovim options
-require("options")
+require 'options'
 
 -- Colorschemes
-require("colorscheme")
+require 'colorscheme'
 
--- -- Plugins
--- require("plugins")
+-- Plugins
 
-local plugin_path = vim.fn.stdpath("config") .. "/lua/plugins"
+local plugin_path = vim.fn.stdpath 'config' .. '/lua/plugins'
 
 for _, file in ipairs(vim.fn.readdir(plugin_path)) do
-  if file:match("%.lua$") then
-    local module = "plugins." .. file:gsub("%.lua$", "")
+  if file:match '%.lua$' then
+    local module = 'plugins.' .. file:gsub('%.lua$', '')
     require(module)
   end
 end
 
 -- Language stuff
-require("lsp")
-
+require 'lsp'
